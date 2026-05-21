@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAFAT CODEX — Emote Panel Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+:root{
+  --bg-0:#04060d;
+  --bg-1:#070b18;
+  --ink:#dfeaff;
+  --ink-soft:#8aa3c4;
+  --ink-dim:#5b7196;
+  --line:rgba(120,180,255,.14);
+  --line-2:rgba(120,180,255,.24);
+  --cyan:#5cd7ff;
+  --cyan-2:#37b6ff;
+  --gold:#e9c87a;
+  --gold-2:#f6dfa1;
+  --grad-cyan: linear-gradient(135deg,#37b6ff 0%, #5cd7ff 50%, #7af0ff 100%);
+  --grad-gold: linear-gradient(135deg,#a07a2b 0%, #e9c87a 55%, #fff1c2 100%);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  font-family:'Sora','Rajdhani',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 600px at 15% -10%, rgba(55,182,255,.22), transparent 60%),
+    radial-gradient(800px 500px at 90% 110%, rgba(233,200,122,.12), transparent 60%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 50%, var(--bg-0));
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(120,180,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,180,255,.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 40%, transparent 80%);
+  animation: gridMove 24s linear infinite;
+}
+@keyframes gridMove{0%{transform: translateY(0)} 100%{transform: translateY(56px)}}
+.orb{position:fixed; border-radius:50%; filter: blur(70px); opacity:.55; z-index:0; pointer-events:none}
+.orb1{width:520px; height:520px; left:-160px; top:-180px; background: radial-gradient(circle, rgba(55,182,255,.55), transparent 70%); animation: float 14s ease-in-out infinite}
+.orb2{width:460px; height:460px; right:-140px; bottom:-160px; background: radial-gradient(circle, rgba(233,200,122,.35), transparent 70%); animation: float 18s ease-in-out infinite reverse}
+.orb3{width:360px; height:360px; left:55%; top:60%; background: radial-gradient(circle, rgba(122,240,255,.35), transparent 70%); animation: float 22s ease-in-out infinite}
+@keyframes float{0%,100%{transform: translate3d(0,0,0)} 50%{transform: translate3d(20px,-30px,0)}}
+.particles{position:fixed; inset:0; z-index:0; pointer-events:none}
+.particle{
+  position:absolute; bottom:-10px; background: var(--cyan); border-radius:50%;
+  box-shadow: 0 0 8px var(--cyan);
+  animation: rise linear infinite;
+}
+@keyframes rise{
+  0%{transform: translateY(0) translateX(0); opacity:0}
+  10%{opacity:.7}
+  100%{transform: translateY(-110vh) translateX(20px); opacity:0}
+}
+
+/* Wrap */
+.login-wrap{position:relative; z-index:2; width:min(440px, 92vw)}
+.brand-top{text-align:center; margin-bottom:1.4rem}
+.brand-icon{
+  width:74px; height:74px; border-radius:20px; margin:0 auto 1rem;
+  background: var(--grad-cyan);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 16px 40px rgba(55,182,255,.4), inset 0 1px 0 rgba(255,255,255,.5);
+  position:relative;
+}
+.brand-icon::after{
+  content:""; position:absolute; inset:-3px; border-radius:22px;
+  background: conic-gradient(from 180deg, transparent, rgba(122,240,255,.8), transparent 60%);
+  filter: blur(10px); opacity:.6; z-index:-1;
+  animation: spin 6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(1turn)}}
+.brand-icon i{color:#04121f; font-size:1.9rem}
+.brand-name{
+  font-family:'Orbitron',sans-serif; font-weight:900; font-size:1.6rem;
+  letter-spacing:5px;
+  background: linear-gradient(90deg, #fff, #cfe9ff 60%, var(--gold-2));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter: drop-shadow(0 0 20px rgba(92,215,255,.25));
+}
+.brand-sub{margin-top:8px; font-size:.75rem; color: var(--ink-soft); letter-spacing:3px; text-transform:uppercase}
+
+/* Card */
+.login-card{
+  position:relative; overflow:hidden;
+  padding:2rem 1.8rem 1.6rem;
+  border-radius:22px;
+  background: linear-gradient(180deg, rgba(18,30,56,.78), rgba(10,16,32,.7));
+  border:1px solid var(--line-2);
+  box-shadow: 0 30px 80px rgba(0,15,40,.55), 0 1px 0 rgba(255,255,255,.04) inset;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+.login-card::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background: linear-gradient(135deg, rgba(92,215,255,.55), transparent 40%, rgba(233,200,122,.4));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events:none;
+}
+.status-row{display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1.4rem}
+.status-dot{width:8px; height:8px; border-radius:50%; background:#7ff0b3; box-shadow:0 0 12px #7ff0b3; animation: blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.status-text{font-size:.72rem; letter-spacing:3px; color: var(--ink-soft)}
+.card-title{
+  text-align:center; font-family:'Orbitron',sans-serif; font-size:1rem;
+  letter-spacing:5px; color:#eaf3ff; margin-bottom:1.4rem; font-weight:700;
+}
+.alert{
+  display:none; align-items:center; gap:10px;
+  padding:.7rem .9rem; margin-bottom:1rem;
+  border-radius:10px; font-size:.85rem; font-weight:600;
+}
+.alert.show{display:flex}
+.alert-error{background: rgba(255,90,110,.10); border:1px solid rgba(255,120,140,.35); color:#ffb6c0}
+.alert-success{background: rgba(127,240,179,.10); border:1px solid rgba(127,240,179,.35); color:#a3f6c8}
+
+.field-box{margin-bottom:1rem}
+.field-label{
+  display:block; font-size:.68rem; color: var(--ink-dim); margin-bottom:8px;
+  letter-spacing:2.5px; text-transform:uppercase; font-weight:600;
+}
+.field-inner{position:relative}
+.field-input{
+  width:100%; padding:.85rem 2.6rem .85rem 1rem;
+  background: rgba(4,8,18,.85); color:#eaf3ff;
+  border:1px solid rgba(120,180,255,.18); border-radius:12px;
+  font-family:'Sora','Rajdhani',sans-serif; font-size:.95rem;
+  outline:none; transition: all .25s ease;
+}
+.field-input::placeholder{color: rgba(160,190,230,.35)}
+.field-input:focus{border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(92,215,255,.18), 0 0 18px rgba(92,215,255,.12); background: rgba(8,16,32,.95)}
+.f-icon{
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  color: var(--cyan); opacity:.7; font-size:.95rem;
+}
+
+.btn-login{
+  position:relative; overflow:hidden;
+  width:100%; margin-top:.6rem;
+  padding:.95rem 1rem; border:none; cursor:pointer;
+  border-radius:12px; color:#04121f;
+  font-family:'Orbitron',sans-serif; font-size:.88rem; font-weight:800; letter-spacing:3px;
+  background: var(--grad-cyan);
+  box-shadow: 0 14px 32px rgba(55,182,255,.4), inset 0 1px 0 rgba(255,255,255,.5);
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+.btn-login::before{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.55) 50%, transparent 80%);
+  transform: translateX(-120%); transition: transform .7s ease;
+}
+.btn-login:hover{transform: translateY(-2px); box-shadow: 0 20px 44px rgba(55,182,255,.5)}
+.btn-login:hover::before{transform: translateX(120%)}
+
+.login-footer{
+  text-align:center; margin-top:1.6rem; padding-top:1.2rem;
+  border-top:1px solid var(--line);
+}
+.footer-dev{font-size:.74rem; color: var(--ink-dim); letter-spacing:2px}
+.footer-dev span{
+  background: var(--grad-gold); -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; font-weight:800;
+}
+</style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="login-wrap">
+        <!-- Brand -->
+        <div class="brand-top">
+            <div class="brand-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="brand-name">ARAFAT CODEX</div>
+            <div class="brand-sub">Free Fire Emote System</div>
+        </div>
+
+        <!-- Card -->
+        <div class="login-card">
+            <div class="status-row">
+                <div class="status-dot"></div>
+                <div class="status-text">SYSTEM ONLINE</div>
+            </div>
+
+            <div class="card-title">ADMIN ACCESS</div>
+
+            <div id="alertBox" class="alert alert-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="alertMsg">Invalid credentials!</span>
+            </div>
+
+            <div class="field-box">
+                <label class="field-label">Username</label>
+                <div class="field-inner">
+                    <input type="text" class="field-input" id="username" placeholder="Enter username" autocomplete="off">
+                    <i class="fas fa-user f-icon"></i>
+                </div>
+            </div>
+
+            <div class="field-box">
+                <label class="field-label">Password</label>
+                <div class="field-inner">
+                    <input type="password" class="field-input" id="password" placeholder="Enter password" autocomplete="off">
+                    <i class="fas fa-lock f-icon"></i>
+                </div>
+            </div>
+
+            <button class="btn-login" onclick="doLogin()">
+                <i class="fas fa-sign-in-alt"></i> &nbsp; LOGIN
+            </button>
+
+            <div class="login-footer">
+                <div class="footer-dev">Developed by <span>ARAFAT CODEX</span> &bull; OB53 Edition</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auth check - already logged in?
+        if (localStorage.getItem('kc_logged_in') === '1') {
+            window.location.replace('index.html');
+        }
+
+        // Generate particles
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.cssText = `
+                left: ${Math.random()*100}%;
+                width: ${Math.random()*2+1}px;
+                height: ${Math.random()*2+1}px;
+                animation-duration: ${Math.random()*10+8}s;
+                animation-delay: ${Math.random()*10}s;
+                opacity: ${Math.random()*0.5+0.1};
+            `;
+            container.appendChild(p);
+        }
+
+        // Login logic
+        function doLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const alertBox = document.getElementById('alertBox');
+            const alertMsg = document.getElementById('alertMsg');
+
+            if (!user || !pass) {
+                showAlert('error', 'Please enter username and password!');
+                return;
+            }
+
+            const stored = JSON.parse(localStorage.getItem('admin_users') || '[]');
+            const defaultAdmin = { username: 'admin', password: 'arafatflex', role: 'admin', region: 'BD' };
+            const allUsers = stored.length ? stored : [defaultAdmin];
+            const found = allUsers.find(u => u.username === user && u.password === pass);
+
+            if (found) {
+                localStorage.setItem('kc_logged_in', '1');
+                showAlert('success', 'Login successful! Redirecting...');
+                setTimeout(() => { window.location.href = 'index.html'; }, 800);
+            } else {
+                showAlert('error', 'Invalid username or password!');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function showAlert(type, msg) {
+            const box = document.getElementById('alertBox');
+            const msgEl = document.getElementById('alertMsg');
+            box.className = `alert show alert-${type}`;
+            msgEl.textContent = msg;
+        }
+
+        // Enter key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter') doLogin();
+        });
+    </script>
+</body>
+</html>

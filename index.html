@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAFAT CODEX — Free Fire Emote Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+:root{
+  --bg-0:#04060d;
+  --bg-1:#070b18;
+  --bg-2:#0b1326;
+  --ink:#dfeaff;
+  --ink-soft:#8aa3c4;
+  --ink-dim:#5b7196;
+  --line:rgba(120,180,255,.12);
+  --line-2:rgba(120,180,255,.22);
+  --cyan:#5cd7ff;
+  --cyan-2:#37b6ff;
+  --cyan-3:#7af0ff;
+  --gold:#e9c87a;
+  --gold-2:#f6dfa1;
+  --danger:#ff7a8a;
+  --ok:#7ff0b3;
+  --warn:#ffd66a;
+  --glass: linear-gradient(180deg, rgba(18,30,56,.72), rgba(10,16,32,.62));
+  --glass-2: linear-gradient(180deg, rgba(22,36,68,.86), rgba(10,16,32,.72));
+  --grad-cyan: linear-gradient(135deg,#37b6ff 0%, #5cd7ff 50%, #7af0ff 100%);
+  --grad-gold: linear-gradient(135deg,#a07a2b 0%, #e9c87a 55%, #fff1c2 100%);
+  --shadow-1: 0 10px 40px rgba(0,30,80,.55), 0 1px 0 rgba(255,255,255,.04) inset;
+  --shadow-glow: 0 0 0 1px rgba(92,215,255,.35), 0 12px 50px rgba(55,182,255,.25);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  font-family:'Sora','Rajdhani',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 600px at 12% -10%, rgba(55,182,255,.22), transparent 60%),
+    radial-gradient(800px 500px at 92% 8%, rgba(233,200,122,.10), transparent 60%),
+    radial-gradient(700px 500px at 50% 110%, rgba(122,240,255,.10), transparent 60%),
+    linear-gradient(180deg,var(--bg-0),var(--bg-1) 40%, var(--bg-0));
+  overflow-x:hidden;
+  letter-spacing:.2px;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    linear-gradient(rgba(120,180,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,180,255,.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 40%, transparent 80%);
+}
+body::after{
+  content:""; position:fixed; inset:-20%; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(40% 40% at 20% 30%, rgba(55,182,255,.18), transparent 60%),
+    radial-gradient(40% 40% at 80% 70%, rgba(233,200,122,.10), transparent 60%);
+  filter: blur(40px);
+  animation: aurora 18s ease-in-out infinite alternate;
+}
+@keyframes aurora{ 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-3%,2%,0)} }
+#particles-js{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.55}
+
+/* ===== LOADING ===== */
+#loadingOverlay{
+  position:fixed; inset:0; z-index:9999;
+  background: radial-gradient(800px 500px at 50% 30%, rgba(55,182,255,.18), transparent 60%), var(--bg-0);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity .6s ease;
+}
+#loadingOverlay.hidden{opacity:0; pointer-events:none}
+.loading-logo{
+  font-family:'Orbitron',sans-serif; font-weight:900; font-size:2.2rem;
+  background:var(--grad-cyan); -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; letter-spacing:6px;
+  margin-bottom:1.8rem; filter: drop-shadow(0 0 20px rgba(92,215,255,.35));
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.65; transform:scale(.985)}}
+.loading-bar-bg{
+  width:280px; height:6px; border-radius:999px;
+  background:rgba(120,180,255,.10); overflow:hidden;
+  box-shadow: inset 0 0 0 1px rgba(120,180,255,.18);
+}
+#loadingProgress{
+  height:100%; width:0%; border-radius:999px;
+  background: var(--grad-cyan);
+  box-shadow: 0 0 18px rgba(92,215,255,.7);
+  transition:width .3s ease;
+}
+#loadingText{margin-top:1rem; font-size:.78rem; color:var(--ink-soft); letter-spacing:4px}
+
+/* ===== HEADER ===== */
+.dashboard-header{
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.6rem;
+  background: linear-gradient(180deg, rgba(7,11,24,.85), rgba(7,11,24,.55));
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom:1px solid var(--line);
+  box-shadow: 0 12px 30px rgba(0,0,0,.45);
+}
+.header-left,.header-right{display:flex; align-items:center; gap:1rem}
+.header-logo{display:flex; align-items:center; gap:.9rem}
+.logo-icon{
+  width:46px; height:46px; border-radius:14px; position:relative;
+  background: var(--grad-cyan);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 12px 28px rgba(55,182,255,.35), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.logo-icon::after{
+  content:""; position:absolute; inset:-2px; border-radius:16px;
+  background: conic-gradient(from 180deg, transparent, rgba(122,240,255,.7), transparent 60%);
+  filter: blur(8px); opacity:.55; z-index:-1;
+  animation: spin 6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(1turn)}}
+.logo-icon i{color:#031224; font-size:1.25rem}
+.logo-text{display:flex; flex-direction:column}
+.logo-main{
+  font-family:'Orbitron',sans-serif; font-weight:900; font-size:1.2rem;
+  background: linear-gradient(90deg,#fff, #cfe9ff 60%, var(--gold-2));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:3px;
+}
+.logo-subtitle{font-size:.7rem; color:var(--ink-dim); letter-spacing:3px; text-transform:uppercase}
+.status-chip{
+  display:flex; align-items:center; gap:8px;
+  padding:.45rem .95rem; font-size:.78rem;
+  background: var(--glass); border:1px solid var(--line-2);
+  border-radius:999px; color:var(--ink-soft);
+}
+.status-dot{width:8px; height:8px; border-radius:50%; background:var(--ok); box-shadow:0 0 12px var(--ok); animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.status-text{letter-spacing:2px}
+#connectionStatus{color:#fff; font-weight:700; letter-spacing:2px}
+.btn-logout{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:.55rem 1rem; border-radius:10px; cursor:pointer;
+  background: linear-gradient(180deg, rgba(255,90,110,.18), rgba(255,90,110,.08));
+  border:1px solid rgba(255,120,140,.32);
+  color:#ffb6c0; font-family:'Sora',sans-serif; font-size:.8rem; letter-spacing:1.5px;
+  transition: all .25s ease;
+}
+.btn-logout:hover{transform:translateY(-1px); border-color:#ff9aab; color:#fff; box-shadow:0 10px 24px rgba(255,90,110,.25)}
+
+/* ===== LAYOUT ===== */
+.dashboard-content{position:relative; z-index:1; padding:2rem; max-width:1600px; margin:0 auto}
+
+/* ===== SECTION HEADER ===== */
+.section-header{
+  margin: .4rem 0 1.4rem; padding-bottom:.9rem;
+  border-bottom:1px solid var(--line); position:relative;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.section-header h2{
+  font-family:'Orbitron',sans-serif; font-size:1.05rem; font-weight:700;
+  color:#eaf3ff; display:flex; align-items:center; gap:12px;
+  letter-spacing:4px; text-transform:uppercase;
+}
+.section-header h2 i{
+  width:32px; height:32px; border-radius:9px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background: var(--glass-2); border:1px solid var(--line-2);
+  color:var(--cyan); font-size:.85rem;
+}
+.header-glow{
+  position:absolute; left:0; bottom:-1px; height:2px; width:220px;
+  background: linear-gradient(90deg, var(--cyan), var(--gold), transparent);
+  filter: drop-shadow(0 0 8px rgba(92,215,255,.5));
+  animation: glowScan 3.6s ease-in-out infinite;
+}
+@keyframes glowScan{0%,100%{opacity:.5; width:160px} 50%{opacity:1; width:280px}}
+
+/* ===== CARDS / INPUTS ===== */
+.input-grid{
+  display:grid; gap:1.1rem; margin-bottom:1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.input-card, .ew-toggle-card, .manual-send-row{
+  position:relative; overflow:hidden;
+  background: var(--glass);
+  border:1px solid var(--line-2);
+  border-radius:var(--radius);
+  padding:1.1rem 1.3rem;
+  box-shadow: var(--shadow-1);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.input-card{display:flex; align-items:center; gap:1.1rem}
+.input-card::after, .ew-toggle-card::after, .manual-send-row::after{
+  content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  background: linear-gradient(135deg, rgba(92,215,255,.18), transparent 35%, rgba(233,200,122,.10));
+  opacity:.0; transition:opacity .4s ease;
+}
+.input-card:hover, .ew-toggle-card:hover, .manual-send-row:hover{
+  transform: translateY(-2px);
+  border-color: rgba(92,215,255,.45);
+  box-shadow: var(--shadow-glow);
+}
+.input-card:hover::after, .ew-toggle-card:hover::after, .manual-send-row:hover::after{opacity:.6}
+.input-icon, .ew-icon{
+  width:50px; height:50px; border-radius:13px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg, rgba(55,182,255,.18), rgba(55,182,255,.04));
+  border:1px solid rgba(92,215,255,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 20px rgba(0,40,80,.35);
+}
+.input-icon i, .ew-icon i{
+  font-size:1.1rem; background:var(--grad-cyan);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.input-info{flex:1; min-width:0}
+.input-info label{
+  display:block; font-size:.68rem; color:var(--ink-dim);
+  text-transform:uppercase; letter-spacing:2.5px; margin-bottom:8px; font-weight:600;
+}
+.input-info input, .input-info select, .manual-send-row input{
+  width:100%; padding:.7rem .9rem; outline:none;
+  background: rgba(4,8,18,.8);
+  border:1px solid rgba(120,180,255,.18);
+  border-radius:10px; color:#eaf3ff;
+  font-family:'Sora','Rajdhani',sans-serif; font-size:.95rem;
+  transition: all .25s ease;
+}
+.input-info input::placeholder, .manual-send-row input::placeholder{color: rgba(160,190,230,.35)}
+.input-info input:focus, .input-info select:focus, .manual-send-row input:focus{
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(92,215,255,.18), 0 0 18px rgba(92,215,255,.18);
+  background: rgba(8,16,32,.95);
+}
+.input-info select{cursor:pointer; appearance:none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--cyan) 50%), linear-gradient(135deg, var(--cyan) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat; padding-right:2.2rem;
+}
+.input-info select option{background:#0a1326; color:#eaf3ff}
+
+/* EW Toggle */
+.ew-toggle-card{display:flex; align-items:center; justify-content:space-between; gap:1rem}
+.ew-info{display:flex; align-items:center; gap:1rem}
+.ew-label{font-size:.98rem; font-weight:600; color:#fff; letter-spacing:1px}
+.ew-desc{font-size:.74rem; color:var(--ink-dim); margin-top:3px}
+.toggle{position:relative; display:inline-block; width:58px; height:30px; flex-shrink:0}
+.toggle input{opacity:0; width:0; height:0}
+.slider{
+  position:absolute; inset:0; cursor:pointer; border-radius:999px;
+  background: rgba(8,16,32,.9); border:1px solid rgba(120,180,255,.22);
+  transition: .3s;
+}
+.slider:before{
+  content:""; position:absolute; height:22px; width:22px; left:3px; top:3px;
+  background: #6f87a8; border-radius:50%; transition:.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+}
+input:checked + .slider{background: linear-gradient(135deg, rgba(55,182,255,.5), rgba(92,215,255,.3)); border-color: var(--cyan)}
+input:checked + .slider:before{transform: translateX(27px); background: var(--grad-cyan); box-shadow:0 0 14px var(--cyan)}
+
+/* Manual send */
+.manual-send-row{display:flex; gap:1rem; margin-bottom:1.4rem; align-items:flex-end}
+.manual-send-row .input-group{flex:1}
+.manual-send-row label{
+  display:block; font-size:.68rem; color:var(--ink-dim);
+  text-transform:uppercase; letter-spacing:2.5px; margin-bottom:8px; font-weight:600;
+}
+.btn-send-manual{
+  position:relative; overflow:hidden;
+  padding:.75rem 2rem; border:none; cursor:pointer; white-space:nowrap;
+  border-radius:11px; color:#04121f; font-weight:800;
+  font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:.78rem;
+  background: var(--grad-cyan);
+  box-shadow: 0 12px 28px rgba(55,182,255,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+.btn-send-manual::before{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.55) 50%, transparent 80%);
+  transform: translateX(-120%); transition: transform .7s ease;
+}
+.btn-send-manual:hover{transform:translateY(-2px); box-shadow:0 18px 38px rgba(55,182,255,.45)}
+.btn-send-manual:hover::before{transform: translateX(120%)}
+
+/* ===== FILTER BAR ===== */
+.filter-bar{display:flex; gap:.9rem; margin-bottom:1.4rem; flex-wrap:wrap; align-items:center}
+.search-box{flex:1; min-width:220px; position:relative}
+.search-box i{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--cyan); opacity:.7}
+.search-box input, .filter-select{
+  width:100%;
+  background: var(--glass); border:1px solid var(--line-2);
+  border-radius:12px; color:#eaf3ff;
+  font-family:'Sora',sans-serif; font-size:.95rem;
+  padding:.75rem 1rem .75rem 2.6rem; outline:none;
+  transition:all .25s ease;
+}
+.search-box input:focus{border-color: var(--cyan); box-shadow:0 0 0 3px rgba(92,215,255,.18)}
+.filter-select{padding:.75rem 1rem; cursor:pointer; min-width:200px}
+.filter-select:focus{border-color: var(--cyan); box-shadow:0 0 0 3px rgba(92,215,255,.18)}
+.filter-select option{background:#0a1326}
+.emote-counter{
+  background: var(--glass); border:1px solid var(--line-2);
+  border-radius:12px; padding:.75rem 1.2rem; font-size:.8rem;
+  color:var(--ink-soft); letter-spacing:1.5px; white-space:nowrap;
+}
+.emote-counter span{
+  color:transparent; background:var(--grad-cyan); -webkit-background-clip:text; background-clip:text;
+  font-weight:800; font-family:'Orbitron',sans-serif; margin: 0 4px;
+}
+
+/* ===== EMOTE GRID ===== */
+.emotes-grid{
+  display:grid; gap:1rem; margin-bottom:2rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.emote-card{
+  position:relative; overflow:hidden;
+  background: var(--glass);
+  border:1px solid var(--line-2);
+  border-radius:16px;
+  padding:1rem .8rem .85rem;
+  display:flex; flex-direction:column; align-items:center; gap:.5rem;
+  cursor:pointer; transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  box-shadow: 0 8px 24px rgba(0,15,40,.45);
+}
+.emote-card::before{
+  content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px;
+  background: linear-gradient(135deg, rgba(92,215,255,.55), rgba(233,200,122,.4) 60%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity:0; transition: opacity .3s ease;
+  pointer-events:none;
+}
+.emote-card:hover{transform: translateY(-4px); box-shadow: var(--shadow-glow); border-color: rgba(92,215,255,.35)}
+.emote-card:hover::before{opacity:1}
+.emote-card.sending{animation: cardPulse .7s ease; border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan), 0 0 40px rgba(92,215,255,.55)}
+@keyframes cardPulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+.ob53-tag{
+  position:absolute; top:8px; right:8px;
+  font-family:'Orbitron',sans-serif; font-size:.55rem; font-weight:800;
+  padding:3px 8px; border-radius:999px; letter-spacing:1.2px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 4px 10px rgba(0,0,0,.45);
+  text-shadow:0 1px 0 rgba(0,0,0,.4);
+}
+.emote-number{font-family:'Orbitron',sans-serif; font-size:.58rem; color:var(--ink-dim); letter-spacing:1.5px}
+.emote-img-container{
+  width:88px; height:88px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  background: radial-gradient(circle at 50% 40%, rgba(92,215,255,.15), transparent 65%);
+}
+.emote-img{
+  width:80px; height:80px; object-fit:contain;
+  transition: transform .35s ease;
+  filter: drop-shadow(0 6px 14px rgba(0,40,80,.6)) drop-shadow(0 0 10px rgba(92,215,255,.25));
+}
+.emote-card:hover .emote-img{transform: scale(1.12) rotate(-2deg)}
+.emote-name{
+  font-size:.75rem; color:#cfe1ff; text-align:center;
+  max-width:130px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-weight:600; letter-spacing:.3px;
+}
+.emote-id{font-family:'Orbitron',sans-serif; font-size:.58rem; color:var(--ink-dim); letter-spacing:1.5px}
+.emote-actions{display:flex; gap:.4rem; width:100%; margin-top:4px}
+.send-emote-btn{
+  flex:1; padding:.5rem .4rem; cursor:pointer; border:none;
+  border-radius:9px; color:#04121f;
+  font-family:'Orbitron',sans-serif; font-size:.62rem; font-weight:800; letter-spacing:1px;
+  background: var(--grad-cyan);
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  box-shadow: 0 8px 18px rgba(55,182,255,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  transition: transform .2s ease, box-shadow .25s ease;
+}
+.send-emote-btn:hover{transform:translateY(-1px); box-shadow:0 12px 26px rgba(55,182,255,.5)}
+.send-emote-btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
+.copy-id-btn{
+  padding:.5rem .65rem; cursor:pointer;
+  background: rgba(8,16,32,.85); border:1px solid var(--line-2);
+  border-radius:9px; color:var(--cyan); font-size:.78rem;
+  transition: all .25s ease;
+}
+.copy-id-btn:hover{border-color: var(--gold); color:var(--gold)}
+
+/* Load more */
+.load-more-container{display:flex; justify-content:center; margin:2rem 0}
+.btn-load-more{
+  position:relative; padding:.85rem 2.5rem; border-radius:12px; cursor:pointer;
+  background: var(--glass); border:1px solid var(--line-2);
+  color:#eaf3ff; font-family:'Orbitron',sans-serif; font-size:.82rem;
+  font-weight:700; letter-spacing:2px;
+  display:flex; align-items:center; gap:10px;
+  transition: all .25s ease;
+}
+.btn-load-more:hover{border-color: var(--cyan); color:var(--cyan); transform: translateY(-2px); box-shadow: var(--shadow-glow)}
+.btn-load-more:disabled{opacity:.5; cursor:not-allowed; transform:none}
+
+/* No results */
+.no-results{text-align:center; padding:4rem 2rem; grid-column:1/-1}
+.no-results i{font-size:3rem; color: rgba(120,180,255,.25); display:block; margin-bottom:1rem}
+.no-results h3{font-family:'Orbitron',sans-serif; color: var(--ink-soft); font-size:1rem; letter-spacing:3px}
+.no-results p{color: var(--ink-dim); font-size:.85rem; margin-top:.5rem}
+
+/* Notifications */
+.notification{
+  position:fixed; right:1.5rem; bottom:1.5rem; z-index:9998;
+  padding:.95rem 1.4rem; border-radius:12px;
+  display:flex; align-items:center; gap:10px;
+  font-size:.9rem; font-weight:600; max-width:380px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: rgba(10,18,36,.85);
+  border:1px solid var(--line-2);
+  box-shadow: 0 18px 40px rgba(0,0,0,.5);
+  animation: slideIn .35s cubic-bezier(.2,.9,.3,1.2);
+}
+.notification.success{color:var(--ok); border-color: rgba(127,240,179,.35)}
+.notification.error{color:#ff9aaa; border-color: rgba(255,140,160,.35)}
+.notification.warning{color:var(--warn); border-color: rgba(255,214,106,.35)}
+.notification.info{color:var(--cyan); border-color: rgba(92,215,255,.35)}
+@keyframes slideIn{from{transform: translateX(120%); opacity:0} to{transform: translateX(0); opacity:1}}
+@keyframes slideOut{from{transform: translateX(0); opacity:1} to{transform: translateX(120%); opacity:0}}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:10px; height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background: linear-gradient(180deg, rgba(55,182,255,.35), rgba(55,182,255,.15)); border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background: linear-gradient(180deg, var(--cyan), rgba(55,182,255,.3))}
+
+/* Responsive */
+@media(max-width:760px){
+  .dashboard-header{padding:.8rem 1rem}
+  .dashboard-content{padding:1.2rem}
+  .emotes-grid{grid-template-columns: repeat(auto-fill, minmax(124px,1fr)); gap:.7rem}
+  .emote-img-container,.emote-img{width:72px; height:72px}
+  .logo-main{font-size:1rem; letter-spacing:2px}
+  .logo-subtitle{font-size:.62rem}
+  .status-chip{display:none}
+  .filter-bar{gap:.6rem}
+  .filter-select{min-width:0; flex:1}
+}
+</style>
+</head>
+<body>
+<div id="particles-js"></div>
+<!-- Loading -->
+<div id="loadingOverlay">
+    <div class="loading-logo">ARAFAT CODEX</div>
+    <div class="loading-bar-bg"><div id="loadingProgress"></div></div>
+    <div id="loadingText">LOADING EMOTES...</div>
+</div>
+
+<!-- Header -->
+<header class="dashboard-header">
+    <div class="header-left">
+        <div class="header-logo">
+            <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+            <div class="logo-text">
+                <div class="logo-main">ARAFAT CODEX</div>
+                <div class="logo-subtitle">FREE FIRE EMOTE PANEL</div>
+            </div>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="status-chip">
+            <div class="status-dot"></div>
+            <span class="status-text">SERVER:</span>
+            <span id="connectionStatus">ONLINE</span>
+        </div>
+        <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> LOGOUT</button>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="dashboard-content">
+    <!-- Section: Config -->
+    <div class="section-header">
+        <h2><i class="fas fa-sliders-h"></i> CONFIGURATION</h2>
+        <div class="header-glow"></div>
+    </div>
+
+    <div class="input-grid">
+        <div class="input-card">
+            <div class="input-icon"><i class="fas fa-key"></i></div>
+            <div class="input-info">
+                <label>Team Code</label>
+                <input type="text" id="teamCodeInput" placeholder="Enter team code..." maxlength="20">
+            </div>
+        </div>
+        <div class="input-card">
+            <div class="input-icon"><i class="fas fa-id-badge"></i></div>
+            <div class="input-info">
+                <label>Player UID</label>
+                <input type="text" id="uidInput" placeholder="Enter your UID..." maxlength="20">
+            </div>
+        </div>
+        <div class="input-card">
+            <div class="input-icon"><i class="fas fa-globe"></i></div>
+            <div class="input-info">
+                <label>Region</label>
+                <select id="regionSelect">
+                    <option value="BD">🇧🇩 Bangladesh (BD)</option>
+                    <option value="IND">🇮🇳 India (IND)</option>
+                    <option value="SG">🇸🇬 Singapore (SG)</option>
+                    <option value="VN">🇻🇳 Vietnam (VN)</option>
+                    <option value="TH">🇹🇭 Thailand (TH)</option>
+                    <option value="ID">🇮🇩 Indonesia (ID)</option>
+                    <option value="TW">🇹🇼 Taiwan (TW)</option>
+                    <option value="US">🇺🇸 USA (US)</option>
+                    <option value="SAC">🌎 SAC</option>
+                    <option value="ME">🌍 Middle East (ME)</option>
+                    <option value="PK">🇵🇰 Pakistan (PK)</option>
+                    <option value="CIS">🌐 CIS</option>
+                    <option value="BR">🇧🇷 Brazil (BR)</option>
+                </select>
+            </div>
+        </div>
+        <div class="ew-toggle-card">
+            <div class="ew-info">
+                <div class="ew-icon"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <div class="ew-label">⚡ EW MODE</div>
+                    <div class="ew-desc">Join → Emote → Leave instantly (bot invisible)</div>
+                </div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="ewModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Manual Send -->
+    <div class="manual-send-row">
+        <div class="input-group">
+            <label><i class="fas fa-magic"></i> MANUAL EMOTE ID</label>
+            <input type="text" id="manualEmoteIdInput" placeholder="Enter 9-digit emote ID (e.g. 909000001)" maxlength="9">
+        </div>
+        <button class="btn-send-manual" onclick="sendManualEmote()">
+            <i class="fas fa-paper-plane"></i> SEND
+        </button>
+    </div>
+
+    <!-- Emote Library Section -->
+    <div class="section-header" style="margin-top:1rem;">
+        <h2><i class="fas fa-th-large"></i> EMOTE LIBRARY</h2>
+        <div class="header-glow"></div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by emote name or ID...">
+        </div>
+        <select class="filter-select" id="filterSelect">
+            <option value="all">🔵 All Tags</option>
+            <optgroup label="── EVO Gun Max ──">
+                <option value="evo_max">⭐ EVO Gun Max</option>
+                <option value="evo_lv3">🔥 EVO Gun Lv3</option>
+                <option value="evo_lv2">💠 EVO Gun Lv2</option>
+                <option value="evo_lv1">🟢 EVO Gun Lv1</option>
+            </optgroup>
+            <optgroup label="── Latest Patches ──">
+                <option value="ob53">🔴 OB53 (New!)</option>
+                <option value="ob51">🆕 OB51</option>
+                <option value="ob50">🟡 OB50</option>
+                <option value="ob49">🟠 OB49</option>
+                <option value="ob48">🔶 OB48</option>
+                <option value="ob47">🔷 OB47</option>
+                <option value="ob46">🟣 OB46</option>
+            </optgroup>
+            <optgroup label="── Older Patches ──">
+                <option value="ob45">OB45</option>
+                <option value="ob44">OB44</option>
+                <option value="ob43">OB43</option>
+                <option value="ob42">OB42</option>
+                <option value="ob41">OB41</option>
+                <option value="ob40">OB40</option>
+                <option value="ob39">OB39</option>
+                <option value="ob38">OB38</option>
+                <option value="ob37">OB37</option>
+                <option value="ob36">OB36</option>
+                <option value="ob35">OB35</option>
+                <option value="ob34">OB34</option>
+                <option value="ob33">OB33</option>
+            </optgroup>
+        </select>
+        <div class="emote-counter">SHOWING: <span id="emoteCount">0</span> EMOTES</div>
+    </div>
+
+    <!-- Emote Grid -->
+    <div class="emotes-grid" id="emotesGrid"></div>
+
+    <!-- Load More -->
+    <div class="load-more-container">
+        <button class="btn-load-more" id="loadMoreBtn" onclick="loadMoreEmotes()" style="display:none;">
+            <i class="fas fa-chevron-down"></i><span>LOAD MORE EMOTES</span>
+        </button>
+    </div>
+</div>
+
+<script>
+    // ============== AUTH GUARD ==============
+    (function() {
+        if (localStorage.getItem('kc_logged_in') !== '1') {
+            window.location.replace('login.html');
+        }
+    })();
+
+    // ============== DATA ==============
+    let allEmotes = [];
+    const state = {
+        filteredEmotes: [],
+        currentIndex: 0,
+        batchSize: 48,
+        isLoading: false,
+        allEmotesLoaded: false
+    };
+
+    const IMG_BASE = 'https://cdn.jsdelivr.net/gh/ShahGCreator/icon@main/PNG/';
+    const IMG_LOCAL = 'emote_pngs/';
+
+    // Elements
+    const emotesGrid = document.getElementById('emotesGrid');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const emoteCount = document.getElementById('emoteCount');
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
+    const teamCodeInput = document.getElementById('teamCodeInput');
+    const uidInput = document.getElementById('uidInput');
+    const regionSelect = document.getElementById('regionSelect');
+    const ewModeToggle = document.getElementById('ewModeToggle');
+    const manualEmoteIdInput = document.getElementById('manualEmoteIdInput');
+    const connectionStatus = document.getElementById('connectionStatus');
+
+    // ============== INIT ==============
+    window.addEventListener('load', async () => {
+        const progress = document.getElementById('loadingProgress');
+        const loadText = document.getElementById('loadingText');
+
+        // Simulate progress
+        let p = 0;
+        const interval = setInterval(() => {
+            p = Math.min(p + Math.random() * 15, 90);
+            progress.style.width = p + '%';
+        }, 200);
+
+        try {
+            // Load emotes from JSON file
+            const resp = await fetch('all_emote.json');
+            const data = await resp.json();
+            let num = 1;
+            allEmotes = Object.values(data).map(e => ({ ...e, number: num++ }));
+
+            clearInterval(interval);
+            progress.style.width = '100%';
+            loadText.textContent = `LOADED ${allEmotes.length} EMOTES`;
+
+            await new Promise(r => setTimeout(r, 600));
+            document.getElementById('loadingOverlay').classList.add('hidden');
+
+            // Restore saved inputs
+            teamCodeInput.value = localStorage.getItem('kc_teamCode') || '';
+            uidInput.value = localStorage.getItem('kc_uid') || '';
+            regionSelect.value = localStorage.getItem('kc_region') || 'BD';
+            connectionStatus.textContent = (localStorage.getItem('kc_region') || 'BD') + ' • ONLINE';
+
+            filterAndRender();
+            initParticles();
+
+            // Save inputs
+            teamCodeInput.addEventListener('input', () => localStorage.setItem('kc_teamCode', teamCodeInput.value));
+            uidInput.addEventListener('input', () => localStorage.setItem('kc_uid', uidInput.value));
+            regionSelect.addEventListener('change', () => {
+                localStorage.setItem('kc_region', regionSelect.value);
+                connectionStatus.textContent = regionSelect.value + ' • ONLINE';
+            });
+
+            searchInput.addEventListener('input', filterAndRender);
+            filterSelect.addEventListener('change', filterAndRender);
+            window.addEventListener('scroll', handleScroll);
+
+        } catch(e) {
+            clearInterval(interval);
+            loadText.textContent = 'ERROR LOADING DATA';
+            console.error(e);
+        }
+    });
+
+    // ============== OB VERSION MAP ==============
+    // 909000001-040  = EVO Lv1  (base gun emotes)
+    // 909000041-080  = EVO Lv2
+    // 909000081-120  = EVO Lv3
+    // 909000121-150  = EVO Max
+    // 909033xxx      = OB33 patch emotes
+    // 909034xxx      = OB34  ...and so on up to OB51
+    const OB_PREFIX = {
+        ob53:'909053',
+        ob51:'909051', ob50:'909050', ob49:'909049', ob48:'909048',
+        ob47:'909047', ob46:'909046', ob45:'909045', ob44:'909044',
+        ob43:'909043', ob42:'909042', ob41:'909041', ob40:'909040',
+        ob39:'909039', ob38:'909038', ob37:'909037', ob36:'909036',
+        ob35:'909035', ob34:'909034', ob33:'909033',
+    };
+
+    function getEvoLevel(emoteId) {
+        if (!emoteId.startsWith('909000')) return null;
+        const n = parseInt(emoteId.slice(6));
+        if (n >= 1   && n <= 40)  return 'lv1';
+        if (n >= 41  && n <= 80)  return 'lv2';
+        if (n >= 81  && n <= 120) return 'lv3';
+        if (n >= 121 && n <= 160) return 'max';
+        return null;
+    }
+
+    // ============== FILTER & RENDER ==============
+    function filterAndRender() {
+        const q = searchInput.value.toLowerCase().trim();
+        const f = filterSelect.value;
+
+        state.filteredEmotes = allEmotes.filter(em => {
+            const id = em.emote_id;
+            const matchQ = !q || id.includes(q) || (em.emote_name && em.emote_name.toLowerCase().includes(q));
+            let matchF = true;
+
+            if (f !== 'all') {
+                if (f === 'evo_max') matchF = getEvoLevel(id) === 'max';
+                else if (f === 'evo_lv3') matchF = getEvoLevel(id) === 'lv3';
+                else if (f === 'evo_lv2') matchF = getEvoLevel(id) === 'lv2';
+                else if (f === 'evo_lv1') matchF = getEvoLevel(id) === 'lv1';
+                else if (OB_PREFIX[f]) matchF = id.startsWith(OB_PREFIX[f]);
+                else matchF = true;
+            }
+
+            return matchQ && matchF;
+        });
+
+        state.currentIndex = 0;
+        state.allEmotesLoaded = false;
+        updateEmoteCount();
+        renderEmotes();
+    }
+
+    function updateEmoteCount() { emoteCount.textContent = state.filteredEmotes.length; }
+
+    function getImgUrl(emoteId) {
+        return IMG_BASE + emoteId + '.png';
+    }
+
+    function renderEmotes() {
+        if (state.currentIndex === 0) {
+            emotesGrid.innerHTML = '';
+            if (state.filteredEmotes.length === 0) {
+                emotesGrid.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><h3>NO EMOTES FOUND</h3><p>Try another name or ID</p></div>';
+                loadMoreBtn.style.display = 'none'; return;
+            }
+        }
+        const end = Math.min(state.currentIndex + state.batchSize, state.filteredEmotes.length);
+        const batch = state.filteredEmotes.slice(state.currentIndex, end);
+
+        batch.forEach(emote => {
+            const card = document.createElement('div');
+            card.className = 'emote-card';
+            card.dataset.emoteId = emote.emote_id;
+            const imgUrl = getImgUrl(emote.emote_id);
+            const localUrl = IMG_LOCAL + emote.emote_id + '.png';
+            const id = emote.emote_id;
+
+            // Build tag
+            let tagHtml = '';
+            const evoLv = getEvoLevel(id);
+            if (evoLv === 'max') {
+                tagHtml = '<div class="ob53-tag" style="background:linear-gradient(135deg,#6600aa,#9900ff);color:#ffccff;">EVO MAX</div>';
+            } else if (evoLv === 'lv3') {
+                tagHtml = '<div class="ob53-tag" style="background:linear-gradient(135deg,#003300,#006600);color:#88ff88;">EVO Lv3</div>';
+            } else if (evoLv === 'lv2') {
+                tagHtml = '<div class="ob53-tag" style="background:linear-gradient(135deg,#001833,#003366);color:#88ccff;">EVO Lv2</div>';
+            } else if (evoLv === 'lv1') {
+                tagHtml = '<div class="ob53-tag" style="background:linear-gradient(135deg,#1a1a00,#333300);color:#cccc44;">EVO Lv1</div>';
+            } else {
+                for (const [ob, pfx] of Object.entries(OB_PREFIX)) {
+                    if (id.startsWith(pfx)) {
+                        const obNum = ob.replace('ob','OB');
+                        const obN = parseInt(ob.replace('ob',''));
+                        let bg = obN >= 53 ? 'background:linear-gradient(135deg,#660000,#cc2200);color:#ffaaaa'
+                               : obN >= 50 ? 'background:linear-gradient(135deg,#003366,#0055aa);color:#7bd'
+                               : obN >= 47 ? 'background:linear-gradient(135deg,#002244,#003366);color:#6ac'
+                               : 'background:linear-gradient(135deg,#1a1a2e,#16213e);color:#7788aa';
+                        tagHtml = '<div class="ob53-tag" style="' + bg + '">' + obNum + '</div>';
+                        break;
+                    }
+                }
+            }
+
+            const emoteName = emote.emote_name || emote.emote_id;
+            card.innerHTML =
+                tagHtml +
+                '<div class="emote-number">#' + emote.number + '</div>' +
+                '<div class="emote-img-container">' +
+                '<img src="' + imgUrl + '" alt="' + emoteName + '" class="emote-img" ' +
+                'onerror="this.onerror=null;this.src=\'' + localUrl + '\'"></div>' +
+                '<div class="emote-name" title="' + emoteName + '">' + emoteName + '</div>' +
+                '<div class="emote-id">' + id + '</div>' +
+                '<div class="emote-actions">' +
+                '<button class="send-emote-btn" data-emote-id="' + id + '">' +
+                '<i class="fas fa-paper-plane"></i> SEND</button>' +
+                '<button class="copy-id-btn" data-emote-id="' + id + '" title="Copy ID">' +
+                '<i class="fas fa-copy"></i></button></div>';
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.copy-id-btn')) return;
+                card.classList.add('sending');
+                setTimeout(() => card.classList.remove('sending'), 800);
+                sendEmote(emote.emote_id);
+            });
+
+            emotesGrid.appendChild(card);
+        });
+
+        state.currentIndex = end;
+        if (state.currentIndex >= state.filteredEmotes.length) {
+            state.allEmotesLoaded = true;
+            loadMoreBtn.style.display = 'none';
+        } else {
+            loadMoreBtn.style.display = 'flex';
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span>LOAD MORE EMOTES</span>';
+        }
+
+        document.querySelectorAll('.send-emote-btn').forEach(btn => {
+            btn.addEventListener('click', e => { e.stopPropagation(); sendEmote(btn.dataset.emoteId); });
+        });
+        document.querySelectorAll('.copy-id-btn').forEach(btn => {
+            btn.addEventListener('click', e => { e.stopPropagation(); copyToClipboard(btn.dataset.emoteId); });
+        });
+    }
+
+    function loadMoreEmotes() {
+        if (state.isLoading || state.allEmotesLoaded) return;
+        loadMoreBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>LOADING...</span>';
+        loadMoreBtn.disabled = true;
+        setTimeout(() => { renderEmotes(); }, 200);
+    }
+
+    function handleScroll() {
+        if (state.allEmotesLoaded || state.isLoading) return;
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120) {
+            loadMoreEmotes();
+        }
+    }
+
+    // ============== SEND EMOTE ==============
+    async function sendEmote(emoteId) {
+        if (state.isLoading) return;
+        state.isLoading = true;
+
+        const teamCode = teamCodeInput.value.trim();
+        const uid = uidInput.value.trim();
+        const region = regionSelect.value;
+        const ewMode = ewModeToggle.checked;
+
+        if (!teamCode || !uid) {
+            showNotification('Team Code এবং UID দিন!', 'warning');
+            state.isLoading = false; return;
+        }
+
+        const sendBtn = document.querySelector(`.send-emote-btn[data-emote-id="${emoteId}"]`);
+        const origContent = sendBtn ? sendBtn.innerHTML : '';
+        if (sendBtn) { sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; sendBtn.disabled = true; }
+        connectionStatus.textContent = 'SENDING...';
+        connectionStatus.style.color = '#ffcc00';
+
+        try {
+            let apiUrl;
+            if (ewMode) {
+                apiUrl = `/ew?tc=${encodeURIComponent(teamCode)}&emote_id=${emoteId}&uid1=${encodeURIComponent(uid)}`;
+            } else {
+                apiUrl = `/join?tc=${encodeURIComponent(teamCode)}&emote_id=${emoteId}&uid1=${encodeURIComponent(uid)}`;
+            }
+
+            const response = await fetch(apiUrl);
+            if (response.ok) {
+                const modeLabel = ewMode ? '⚡ EW Mode' : 'Normal';
+                showNotification(`✓ Emote ${emoteId} sent! [${modeLabel}]`, 'success');
+                connectionStatus.textContent = region + ' • ONLINE';
+                connectionStatus.style.color = 'var(--sky)';
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch(err) {
+            showNotification(`Error: ${err.message}`, 'error');
+            connectionStatus.textContent = 'ERROR';
+            connectionStatus.style.color = '#ff5555';
+            setTimeout(() => {
+                connectionStatus.textContent = region + ' • ONLINE';
+                connectionStatus.style.color = 'var(--sky)';
+            }, 3000);
+        } finally {
+            if (sendBtn) { sendBtn.innerHTML = origContent; sendBtn.disabled = false; }
+            state.isLoading = false;
+        }
+    }
+
+    function sendManualEmote() {
+        const emoteId = manualEmoteIdInput.value.trim();
+        if (!emoteId) { showNotification('Emote ID দিন!', 'warning'); return; }
+        if (!/^\d{9}$/.test(emoteId)) { showNotification('Emote ID 9 digits হতে হবে', 'warning'); return; }
+        sendEmote(emoteId);
+    }
+
+    function logout() {
+        localStorage.removeItem('kc_logged_in');
+        window.location.href = 'login.html';
+    }
+
+    // ============== UTILITIES ==============
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => showNotification(`✓ Copied: ${text}`, 'success'))
+            .catch(() => {
+                const el = document.createElement('textarea');
+                el.value = text; document.body.appendChild(el);
+                el.select(); document.execCommand('copy');
+                document.body.removeChild(el);
+                showNotification(`✓ Copied: ${text}`, 'success');
+            });
+    }
+
+    function showNotification(msg, type='info') {
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+        const n = document.createElement('div');
+        n.className = `notification ${type}`;
+        const icons = {success:'check-circle', error:'exclamation-circle', warning:'exclamation-triangle', info:'info-circle'};
+        n.innerHTML = `<i class="fas fa-${icons[type]||'info-circle'}"></i><span>${msg}</span>`;
+        document.body.appendChild(n);
+        setTimeout(() => { n.style.animation='slideOut 0.3s ease-out'; setTimeout(()=>n.remove(),300); }, 3200);
+    }
+
+    // ============== PARTICLES ==============
+    function initParticles() {
+        if (typeof particlesJS === 'undefined') return;
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 55, density: { enable:true, value_area:900 } },
+                color: { value: '#00d4ff' },
+                shape: { type: 'circle' },
+                opacity: { value:0.25, random:true },
+                size: { value:2, random:true },
+                line_linked: { enable:true, distance:140, color:'#0099cc', opacity:0.08, width:1 },
+                move: { enable:true, speed:0.9, random:true, out_mode:'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover:{enable:false}, onclick:{enable:false} }
+            }
+        });
+    }
+</script>
+</body>
+</html>
